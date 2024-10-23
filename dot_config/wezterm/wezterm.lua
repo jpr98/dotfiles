@@ -17,6 +17,11 @@ config.color_scheme = "Catppuccin Macchiato"
 config.font = wezterm.font("MesloLGS NF")
 config.font_size = 14
 
+config.inactive_pane_hsb = {
+	saturation = 0.9,
+	brightness = 0.2,
+}
+
 local action = wezterm.action
 config.keys = {
 	-- Mux/split panes commands
@@ -30,6 +35,26 @@ config.keys = {
 		mods = "CMD",
 		action = action.CloseCurrentPane({ confirm = false }),
 	},
+	{
+		key = "DownArrow",
+		mods = "CMD",
+		action = action.ActivatePaneDirection("Down"),
+	},
+	{
+		key = "UpArrow",
+		mods = "CMD",
+		action = action.ActivatePaneDirection("Up"),
+	},
+	{
+		key = "LeftArrow",
+		mods = "CMD",
+		action = action.ActivatePaneDirection("Left"),
+	},
+	{
+		key = "RightArrow",
+		mods = "CMD",
+		action = action.ActivatePaneDirection("Right"),
+	},
 	-- Natural Text Editing commands
 	{
 		mods = "OPT",
@@ -40,16 +65,6 @@ config.keys = {
 		mods = "OPT",
 		key = "RightArrow",
 		action = action.SendKey({ mods = "ALT", key = "f" }),
-	},
-	{
-		mods = "CMD",
-		key = "LeftArrow",
-		action = action.SendKey({ mods = "CTRL", key = "a" }),
-	},
-	{
-		mods = "CMD",
-		key = "RightArrow",
-		action = action.SendKey({ mods = "CTRL", key = "e" }),
 	},
 	{
 		mods = "CMD",
