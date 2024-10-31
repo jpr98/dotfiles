@@ -270,6 +270,7 @@ require("lazy").setup({
 
 			-- Useful for getting pretty icons, but requires a Nerd Font.
 			{ "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
+			"fdschmidt93/telescope-egrepify.nvim",
 		},
 		config = function()
 			-- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -297,19 +298,24 @@ require("lazy").setup({
 				-- You can put your default mappings / updates / etc. in here
 				--  All the info you're looking for is in `:help telescope.setup()`
 				--
-				-- defaults = {
-				--   mappings = {
-				--     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-				--   },
-				-- },
-				-- pickers = {
-				-- find_files = {
-				-- hidden = true,
-				-- },
-				-- },
+				defaults = {
+					mappings = {
+						i = { ["<c-enter>"] = "to_fuzzy_refine" },
+					},
+				},
+				pickers = {
+					live_grep = {
+						-- glob_pattern = "*.lua",
+						cwd = require("telescope.utils").buffer_dir(),
+					},
+				},
 				extensions = {
 					["ui-select"] = {
 						require("telescope.themes").get_dropdown(),
+					},
+					egrepify = {
+						title = true,
+						cwd = require("telescope.utils").buffer_dir(),
 					},
 				},
 			})
@@ -317,20 +323,22 @@ require("lazy").setup({
 			-- Enable Telescope extensions if they are installed
 			pcall(require("telescope").load_extension, "fzf")
 			pcall(require("telescope").load_extension, "ui-select")
+			pcall(require("telescope").load_extension("egrepify"))
 
 			-- See `:help telescope.builtin`
 			local builtin = require("telescope.builtin")
+
 			vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
 			vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
 			vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
 			vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
-			vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "[S]earch by [G]rep" })
 			vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[S]earch [D]iagnostics" })
 			vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume" })
 			vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
 			vim.keymap.set("n", "<leader>sf", function()
 				builtin.find_files({
 					hidden = true,
+					cwd = require("telescope.utils").buffer_dir(),
 				})
 			end, { desc = "[S]earch [F]iles" })
 			vim.keymap.set("n", "<leader>s.", function()
@@ -338,6 +346,9 @@ require("lazy").setup({
 					only_cwd = true,
 				})
 			end, { desc = '[S]earch Recent Files ("." for repeat)' })
+			vim.keymap.set("n", "<leader>sg", function()
+				require("telescope").extensions.egrepify.egrepify({})
+			end, { desc = "[S]earch by [G]rep with Prefixes" })
 
 			-- Slightly advanced example of overriding default behavior and theme
 			vim.keymap.set("n", "<leader>/", function()
@@ -363,7 +374,6 @@ require("lazy").setup({
 			end, { desc = "[S]earch [N]eovim files" })
 		end,
 	},
-
 	-- LSP Plugins
 	{
 		-- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
@@ -722,7 +732,7 @@ require("lazy").setup({
 
 					-- Think of <c-l> as moving to the right of your snippet expansion.
 					--  So if you have a snippet that's like:
-					--  function $name($args)
+					--  function $$args)
 					--    $body
 					--  end
 					--
