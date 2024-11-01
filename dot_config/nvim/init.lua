@@ -298,6 +298,13 @@ require("lazy").setup({
 			-- Telescope picker. This is really useful to discover what Telescope can
 			-- do as well as how to actually do it!
 
+			-- this function removes the oil prefix from the path so telescope cwd
+			-- search works as expected
+			local function fix_oil_directory(cwd)
+				local fixed_cwd = cwd:gsub("oil://", "")
+				return fixed_cwd
+			end
+
 			-- [[ Configure Telescope ]]
 			-- See `:help telescope` and `:help telescope.setup()`
 			require("telescope").setup({
@@ -312,12 +319,11 @@ require("lazy").setup({
 				},
 				pickers = {
 					live_grep = {
-						-- glob_pattern = "*.lua",
-						cwd = require("telescope.utils").buffer_dir(),
+						cwd = fix_oil_directory(require("telescope.utils").buffer_dir()),
 					},
 					find_files = {
 						hidden = true,
-						cwd = require("telescope.utils").buffer_dir(),
+						cwd = fix_oil_directory(require("telescope.utils").buffer_dir()),
 					},
 				},
 				extensions = {
@@ -326,7 +332,7 @@ require("lazy").setup({
 					},
 					egrepify = {
 						title = true,
-						cwd = require("telescope.utils").buffer_dir(),
+						cwd = fix_oil_directory(require("telescope.utils").buffer_dir()),
 					},
 				},
 			})
@@ -899,6 +905,44 @@ require("lazy").setup({
 	--  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
 	--    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
 	-- { import = 'custom.plugins' },
+	{
+		"stevearc/oil.nvim",
+		opts = {},
+		-- Optional dependencies
+		dependencies = {
+			{ "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
+		},
+		config = function()
+			local oil = require("oil")
+			oil.setup({
+				delete_to_trash = true,
+				view_options = {
+					show_hidden = true,
+					is_always_hidden = function(name, _)
+						return name == ".." or name == ".git"
+					end,
+				},
+				float = {
+					padding = 5,
+				},
+				keymaps = {
+					["<C-s>"] = false,
+					["<C-v>"] = {
+						"actions.select",
+						opts = { vertical = true },
+						desc = "Open the entry in a vertical split",
+					},
+				},
+			})
+			vim.keymap.set("n", "-", function()
+				local util = require("oil.util")
+				oil.open_float()
+				util.run_after_load(0, function()
+					oil.open_preview()
+				end)
+			end, { desc = "Open oil with preview" })
+		end,
+	},
 }, {
 	ui = {
 		-- If you are using a Nerd Font: set icons to an empty table which will use the
