@@ -161,6 +161,12 @@ require("lazy").setup({
 	{ -- Adds git related signs to the gutter, as well as utilities for managing changes
 		"lewis6991/gitsigns.nvim",
 		opts = {
+			on_attach = function()
+				local gitsigns = require("gitsigns")
+				vim.keymap.set("n", "<leader>gb", gitsigns.blame, { desc = "[G]it [B]lame" })
+				vim.keymap.set("n", "<leader>gl", gitsigns.toggle_current_line_blame, { desc = "[G]it [L]ine blame" })
+				vim.keymap.set("n", "<leader>gp", gitsigns.preview_hunk, { desc = "[G]it [P]review hunk" })
+			end,
 			signs = {
 				add = { text = "+" },
 				change = { text = "~" },
@@ -302,10 +308,15 @@ require("lazy").setup({
 					mappings = {
 						i = { ["<c-enter>"] = "to_fuzzy_refine" },
 					},
+					file_ignore_patterns = { ".git/" },
 				},
 				pickers = {
 					live_grep = {
 						-- glob_pattern = "*.lua",
+						cwd = require("telescope.utils").buffer_dir(),
+					},
+					find_files = {
+						hidden = true,
 						cwd = require("telescope.utils").buffer_dir(),
 					},
 				},
@@ -335,12 +346,7 @@ require("lazy").setup({
 			vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[S]earch [D]iagnostics" })
 			vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume" })
 			vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
-			vim.keymap.set("n", "<leader>sf", function()
-				builtin.find_files({
-					hidden = true,
-					cwd = require("telescope.utils").buffer_dir(),
-				})
-			end, { desc = "[S]earch [F]iles" })
+			vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
 			vim.keymap.set("n", "<leader>s.", function()
 				builtin.oldfiles({
 					only_cwd = true,
@@ -550,6 +556,7 @@ require("lazy").setup({
 				-- clangd = {},
 				-- gopls = {},
 				pyright = {},
+				bashls = {},
 				-- rust_analyzer = {},
 				-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
 				--
@@ -809,6 +816,9 @@ require("lazy").setup({
 			-- - sd'   - [S]urround [D]elete [']quotes
 			-- - sr)'  - [S]urround [R]eplace [)] [']
 			require("mini.surround").setup()
+
+			-- Auto pairs
+			require("mini.pairs").setup()
 
 			-- Simple and easy statusline.
 			--  You could remove this setup call if you don't like it,
