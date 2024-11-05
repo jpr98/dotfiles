@@ -246,7 +246,7 @@ require("lazy").setup({
 				{ "<leader>s", group = "[S]earch" },
 				{ "<leader>w", group = "[W]orkspace" },
 				{ "<leader>t", group = "[T]oggle" },
-				{ "<leader>h", group = "Git [H]unk", mode = { "n", "v" } },
+				{ "<leader>h", group = "[H]arpoon", mode = { "n", "v" } },
 			},
 		},
 	},
@@ -357,7 +357,7 @@ require("lazy").setup({
 			vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
 			vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[S]earch [D]iagnostics" })
 			vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume" })
-			vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
+			vim.keymap.set("n", "<leader>sb", builtin.buffers, { desc = "[B] Find existing buffers" })
 			vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
 			vim.keymap.set("n", "<leader>s.", function()
 				builtin.oldfiles({
@@ -947,6 +947,65 @@ require("lazy").setup({
 					oil.open_preview()
 				end)
 			end, { desc = "Open oil with preview" })
+		end,
+	},
+	{
+		"ThePrimeagen/harpoon",
+		branch = "harpoon2",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		config = function()
+			local harpoon = require("harpoon")
+			harpoon:setup()
+			-- basic telescope configuration
+			local conf = require("telescope.config").values
+			local function toggle_telescope(harpoon_files)
+				local file_paths = {}
+				for _, item in ipairs(harpoon_files.items) do
+					table.insert(file_paths, item.value)
+				end
+
+				local function remove_harpoon_entry(prompt_bufnr)
+					local actions = require("telescope.actions")
+					local action_state = require("telescope.actions.state")
+					-- Get the current selection
+					local selection = action_state.get_selected_entry()
+					-- Close the Telescope prompt before executing the action
+					actions.close(prompt_bufnr)
+					-- Remove harpoon entry
+					harpoon:list():remove(selection)
+				end
+
+				require("telescope.pickers")
+					.new({}, {
+						prompt_title = "Harpoon",
+						finder = require("telescope.finders").new_table({
+							results = file_paths,
+						}),
+						previewer = conf.file_previewer({}),
+						sorter = conf.generic_sorter({}),
+						attach_mappings = function(_, map)
+							map("i", "<C-e>", remove_harpoon_entry)
+							map("n", "x", remove_harpoon_entry)
+							return true
+						end,
+					})
+					:find()
+			end
+
+			vim.keymap.set("n", "<leader><leader>", function()
+				toggle_telescope(harpoon:list())
+			end, { desc = "Open harpoon window" })
+
+			vim.keymap.set("n", "<leader>ha", function()
+				harpoon:list():add()
+			end, { desc = "[H]arpoon [A]dd entry" })
+
+			vim.keymap.set("n", "<C-,>", function()
+				harpoon:list():prev()
+			end)
+			vim.keymap.set("n", "<C-.>", function()
+				harpoon:list():next()
+			end)
 		end,
 	},
 }, {
