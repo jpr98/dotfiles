@@ -338,6 +338,16 @@ require("lazy").setup({
 					},
 					egrepify = {
 						title = true,
+						vimgrep_arguments = {
+							"rg",
+							"--color=never",
+							"--no-heading",
+							"--with-filename",
+							"--line-number",
+							"--column",
+							"--smart-case",
+							"--hidden",
+						},
 						cwd = fix_oil_directory(require("telescope.utils").buffer_dir()),
 					},
 				},
@@ -938,6 +948,9 @@ require("lazy").setup({
 						opts = { vertical = true },
 						desc = "Open the entry in a vertical split",
 					},
+					["<C-y>"] = {
+						"actions.yank_entry",
+					},
 				},
 			})
 			vim.keymap.set("n", "-", function()
@@ -960,7 +973,7 @@ require("lazy").setup({
 			local conf = require("telescope.config").values
 			local function toggle_telescope(harpoon_files)
 				local file_paths = {}
-				for _, item in ipairs(harpoon_files.items) do
+				for _, item in pairs(harpoon_files.items) do
 					table.insert(file_paths, item.value)
 				end
 
@@ -972,7 +985,9 @@ require("lazy").setup({
 					-- Close the Telescope prompt before executing the action
 					actions.close(prompt_bufnr)
 					-- Remove harpoon entry
-					harpoon:list():remove(selection)
+					if selection then
+						harpoon:list():remove_at(selection.index)
+					end
 				end
 
 				require("telescope.pickers")
@@ -1001,10 +1016,10 @@ require("lazy").setup({
 			end, { desc = "[H]arpoon [A]dd entry" })
 
 			vim.keymap.set("n", "<C-,>", function()
-				harpoon:list():prev()
+				harpoon:list():prev({ ui_nav_wrap = true })
 			end)
 			vim.keymap.set("n", "<C-.>", function()
-				harpoon:list():next()
+				harpoon:list():next({ ui_nav_wrap = true })
 			end)
 		end,
 	},
