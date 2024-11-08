@@ -1,22 +1,4 @@
 return {
-	-- {
-	-- 	"williamboman/mason.nvim",
-	-- 	config = function()
-	-- 		require("mason").setup()
-	-- 	end,
-	-- },
-	-- {
-	-- 	"williamboman/mason-lspconfig.nvim",
-	-- 	config = function()
-	-- 		require("mason-lspconfig").setup({
-	-- 			ensure_installed = {
-	-- 				"lua_ls",
-	-- 				"pyright",
-	-- 				"ruff",
-	-- 			},
-	-- 		})
-	-- 	end,
-	-- },
 	{
 		"neovim/nvim-lspconfig",
 		dependencies = {
@@ -215,28 +197,38 @@ return {
 		---@type blink.cmp.Config
 		opts = {
 			-- 'default' for mappings similar to built-in completion
-			keymap = { preset = "default" },
+			keymap = "default",
 
 			highlight = {
 				use_nvim_cmp_as_default = true,
 			},
 			nerd_font_variant = "mono",
+			signature_help = {
+				enabled = true,
+			},
 
 			sources = {
 				completion = {
 					enabled_providers = { "lsp", "path", "snippets", "buffer", "lazydev" },
 				},
-				providers = {
-					lsp = { fallback_for = { "lazydev" } },
-					-- lazydev = { name = "LazyDev", module = "lazydev.integrations.blink" },
-				},
+				-- providers = {
+				-- 	lsp = { fallback_for = { "lazydev" } },
+				-- 	-- lazydev = { name = "LazyDev", module = "lazydev.integrations.blink" },
+				-- },
 			},
 
 			-- experimental auto-brackets support
 			-- accept = { auto_brackets = { enabled = true } }
 
-			-- experimental signature help support
-			-- trigger = { signature_help = { enabled = true } }
+			windows = {
+				autocomplete = {
+					border = "none",
+				},
+				documentation = {
+					border = "double",
+					auto_show = true,
+				},
+			},
 		},
 	},
 }
