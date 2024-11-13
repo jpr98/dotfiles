@@ -1,5 +1,5 @@
 return {
-
+	"tpope/vim-sleuth",
 }
 -- return {
 --
@@ -143,3 +143,5 @@ return {
 -- 	--    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
 -- 	-- { import = 'custom.plugins' },
 -- }
+
+-- vim: ts=4 sts=4 sw=4 et

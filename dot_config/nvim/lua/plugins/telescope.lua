@@ -59,6 +59,12 @@ return {
 					hidden = true,
 					cwd = fix_oil_directory(require("telescope.utils").buffer_dir()),
 				},
+				git_bcommits = {
+					initial_mode = "normal",
+				},
+				buffers = {
+					initial_mode = "normal",
+				},
 			},
 			extensions = {
 				["ui-select"] = {
@@ -97,6 +103,7 @@ return {
 		vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume" })
 		vim.keymap.set("n", "<leader>sb", builtin.buffers, { desc = "[B] Find existing buffers" })
 		vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
+		vim.keymap.set("n", "<leader>sc", builtin.git_bcommits, { desc = "[B] Find existing buffers" })
 		vim.keymap.set("n", "<leader>s.", function()
 			builtin.oldfiles({
 				only_cwd = true,
@@ -128,6 +135,6 @@ return {
 		vim.keymap.set("n", "<leader>sn", function()
 			builtin.find_files({ cwd = vim.fn.stdpath("config") })
 		end, { desc = "[S]earch [N]eovim files" })
-	end
+	end,
 }
 -- vim: ts=4 sts=4 sw=4 et

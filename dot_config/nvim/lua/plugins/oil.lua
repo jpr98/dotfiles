@@ -28,6 +28,9 @@ return {
 				["<C-y>"] = {
 					"actions.yank_entry",
 				},
+				["<Esc>"] = {
+					"actions.close",
+				},
 			},
 		})
 		vim.keymap.set("n", "-", function()
@@ -41,4 +44,3 @@ return {
 }
 
 -- vim: ts=4 sts=4 sw=4 et
-
