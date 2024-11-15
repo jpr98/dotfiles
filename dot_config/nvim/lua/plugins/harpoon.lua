@@ -32,6 +32,7 @@ return {
 					finder = require("telescope.finders").new_table({
 						results = file_paths,
 					}),
+					initial_mode = "normal",
 					previewer = conf.file_previewer({}),
 					sorter = conf.generic_sorter({}),
 					attach_mappings = function(_, map)
