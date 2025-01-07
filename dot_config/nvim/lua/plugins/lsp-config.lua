@@ -201,37 +201,22 @@ return {
 		---@type blink.cmp.Config
 		opts = {
 			-- 'default' for mappings similar to built-in completion
-			keymap = "default",
-
-			highlight = {
-				use_nvim_cmp_as_default = true,
+			keymap = {
+				preset = "default",
 			},
-			nerd_font_variant = "mono",
-			signature_help = {
-				enabled = true,
-			},
-
-			sources = {
-				completion = {
-					enabled_providers = { "lsp", "path", "snippets", "buffer", "lazydev" },
-				},
-				-- providers = {
-				-- 	lsp = { fallback_for = { "lazydev" } },
-				-- 	-- lazydev = { name = "LazyDev", module = "lazydev.integrations.blink" },
-				-- },
-			},
-
-			-- experimental auto-brackets support
-			-- accept = { auto_brackets = { enabled = true } }
-
-			windows = {
-				autocomplete = {
-					border = "none",
-				},
-				documentation = {
-					border = "double",
-					auto_show = true,
-				},
+			-- sources = {
+			-- 	completion = {
+			-- 		enabled_providers = { "lsp", "path", "snippets", "buffer", "lazydev" },
+			-- 	},
+			-- 	-- providers = {
+			-- 	-- 	lsp = { fallback_for = { "lazydev" } },
+			-- 	-- 	-- lazydev = { name = "LazyDev", module = "lazydev.integrations.blink" },
+			-- 	-- },
+			-- },
+			signature = { enabled = true },
+			completion = {
+				ghost_text = { enabled = true },
+				documentation = { auto_show = true, auto_show_delay_ms = 500 },
 			},
 		},
 	},
