@@ -17,6 +17,9 @@ return {
 				lualine_z = { "location" },
 			},
 			extensions = { "oil" },
+			options = {
+				theme = "nord",
+			},
 		})
 	end,
 }
