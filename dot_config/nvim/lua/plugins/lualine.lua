@@ -152,7 +152,7 @@ return {
 			sections = custom_sections,
 			extensions = { "oil" },
 			options = {
-				theme = "nord",
+				theme = vim.g.colors_name,
 				component_separators = "",
 				section_separators = { left = "", right = "" },
 			},

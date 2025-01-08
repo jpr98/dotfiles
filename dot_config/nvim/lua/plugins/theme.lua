@@ -7,6 +7,17 @@ return {
 		end,
 	},
 	{
+		"cdmill/neomodern.nvim",
+		lazy = false,
+		priority = 1000,
+		config = function()
+			-- require("neomodern").setup({
+			-- 	theme = "roseprime",
+			-- })
+			-- require("neomodern").load()
+		end,
+	},
+	{
 		"shaunsingh/nord.nvim",
 		lazy = false,
 		priority = 1000,
