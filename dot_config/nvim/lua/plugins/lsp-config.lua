@@ -105,6 +105,9 @@ return {
 
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
+			if vim.g.colors_name == "nord" then
+				vim.api.nvim_set_hl(0, "BlinkCmpGhostText", { ctermfg = 102, fg = "#888888" })
+			end
 
 			-- Enable the following language servers
 			local servers = {
@@ -135,6 +138,7 @@ return {
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
+			---@diagnostic disable [missing-fields]
 			require("mason-lspconfig").setup({
 				handlers = {
 					function(server_name)
