@@ -8,8 +8,6 @@ return {
 	},
 	{
 		"cdmill/neomodern.nvim",
-		lazy = false,
-		priority = 1000,
 		config = function()
 			-- require("neomodern").setup({
 			-- 	theme = "roseprime",
@@ -22,7 +20,7 @@ return {
 		lazy = false,
 		priority = 1000,
 		config = function()
-			vim.g.nord_contrast = true
+			-- vim.g.nord_contrast = true
 			vim.cmd.colorscheme("nord")
 			require("nord").set()
 		end,
