@@ -7,11 +7,23 @@ return {
 		return ashen
 	end,
 	config = function()
+		local diffview = require("custom.lualine_diffview")
+
 		local mode_width = 0
 		local branch_width = 0
 		local diff_width = 0
 		local filetype_width = 0
 		local filename_width = 0
+
+		local function fif(condition, if_true, if_false)
+			if condition then
+				print("condition evaluated true, returning: ", if_true)
+				return if_true
+			else
+				print("condition evaluated false, returning: ", if_false)
+				return if_false
+			end
+		end
 
 		local custom_sections = {
 			lualine_a = {
@@ -80,7 +92,7 @@ return {
 					end,
 					padding = { left = 0, right = 0 },
 					cond = function()
-						return vim.opt.columns:get() > 60
+						return not diffview.is_diffview_active() and vim.opt.columns:get() > 60
 					end,
 				},
 				{
@@ -114,7 +126,8 @@ return {
 						return filename
 					end,
 					file_status = true, -- Displays file status (readonly status, modified status)
-					path = 3, -- 0: Just the filename
+					path = (diffview.is_diffview_active and 3 or 0),
+					-- 0: Just the filename
 					-- 1: Relative path
 					-- 2: Absolute path
 					-- 3: Absolute path, with tilde as the home directory
@@ -135,6 +148,10 @@ return {
 					-- icon_only = true,
 				},
 				{ "diagnostics" },
+				{
+					diffview.diffview_status,
+					cond = diffview.is_diffview_active,
+				},
 			},
 			lualine_y = {
 				"progress",

@@ -5,7 +5,11 @@ return {
 		{ "<leader>gdf", "<cmd>DiffviewFileHistory --follow %<CR>", desc = "[G]it [D]iff [F]ile" },
 		{ "<leader>gdh", "<cmd>DiffviewFileHistory<CR>", desc = "[G]it [D]iff [H]istory" },
 		{ "<leader>gdm", "<cmd>DiffviewOpen master<CR>", desc = "[G]it [D]iff [M]aster" },
-		{ "<leader>gdd", "<cmd>DiffviewOpen<CR>", desc = "[G]it [D]iff against HEAD" },
+		{
+			"<leader>gdd",
+			"<cmd>lua require('custom.diffview_filter').open_filtered_diffview()<CR>",
+			desc = "[G]it [D]iff against HEAD",
+		},
 		{ "<leader>gdc", "<cmd>DiffviewClose<CR>", desc = "[G]it [D]iff [C]lose" },
 	},
 	opts = {
