@@ -7,6 +7,7 @@ return {
 			"bash",
 			"c",
 			"diff",
+			"go",
 			"lua",
 			"luadoc",
 			"markdown",
@@ -22,10 +23,8 @@ return {
 		},
 		indent = { enable = true },
 	},
---    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
---    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
---    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
-
+	--    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
+	--    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
+	--    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
 }
 -- vim: ts=4 sts=4 sw=4 et
-

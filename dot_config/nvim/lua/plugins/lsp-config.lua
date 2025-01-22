@@ -112,7 +112,33 @@ return {
 			-- Enable the following language servers
 			local servers = {
 				clangd = {},
-				-- gopls = {},
+				gopls = {
+					settings = {
+						gopls = {
+							completeUnimported = true,
+							usePlaceholders = true,
+							completeFunctionCalls = true,
+							analyses = {
+								shadow = true,
+								unusedparams = true,
+								unusedwrite = true,
+								unusedvariable = true,
+								unusedresult = true,
+							},
+							staticcheck = true,
+							gofumpt = true,
+							-- hints = {
+							-- 	assignVariableTypes = true,
+							-- 	compositeLiteralFields = true,
+							-- 	compositeLiteralTypes = true,
+							-- 	constantValues = true,
+							-- 	functionTypeParameters = true,
+							-- 	parameterNames = true,
+							-- 	rangeVariableTypes = true,
+							-- },
+						},
+					},
+				},
 				pyright = {},
 				bashls = {},
 				lua_ls = {
@@ -204,19 +230,9 @@ return {
 		---@module 'blink.cmp'
 		---@type blink.cmp.Config
 		opts = {
-			-- 'default' for mappings similar to built-in completion
 			keymap = {
 				preset = "default",
 			},
-			-- sources = {
-			-- 	completion = {
-			-- 		enabled_providers = { "lsp", "path", "snippets", "buffer", "lazydev" },
-			-- 	},
-			-- 	-- providers = {
-			-- 	-- 	lsp = { fallback_for = { "lazydev" } },
-			-- 	-- 	-- lazydev = { name = "LazyDev", module = "lazydev.integrations.blink" },
-			-- 	-- },
-			-- },
 			signature = { enabled = true },
 			completion = {
 				ghost_text = { enabled = true },
