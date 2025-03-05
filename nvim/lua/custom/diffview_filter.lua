@@ -1,3 +1,4 @@
+---@diagnostic disable: need-check-nil
 local M = {}
 
 -- List of patterns to exclude
@@ -48,6 +49,36 @@ function M.open_filtered_diffview()
 		vim.cmd("DiffviewOpen -- " .. table.concat(files_to_include, " "))
 	else
 		print("No changes in relevant files.")
+	end
+end
+
+-- Function to determine which branch (main or master) is available
+local function get_git_branch()
+	local handle = io.popen("git branch --list main")
+	local result = handle:read("*a")
+	handle:close()
+
+	if result:match("main") then
+		return "main"
+	else
+		handle = io.popen("git branch --list master")
+		result = handle:read("*a")
+		handle:close()
+
+		if result:match("master") then
+			return "master"
+		else
+			return nil
+		end
+	end
+end
+-- Function to open diff on main/master depending availability
+function M.open_main_master_diffview()
+	local branch = get_git_branch()
+	if branch then
+		vim.cmd("DiffviewOpen " .. branch)
+	else
+		print("Neither 'main' nor 'master' branch found.")
 	end
 end
 
