@@ -227,6 +227,7 @@ return {
 					},
 				},
 			},
+			"Kaiser-Yang/blink-cmp-avante",
 		},
 
 		-- use a release tag to download pre-built binaries
@@ -246,11 +247,18 @@ return {
 						and node
 						and vim.tbl_contains({ "comment", "line_comment", "block_comment" }, node:type())
 					then
-						return { "buffer" }
+						return { "avante", "buffer" }
 					else
-						return { "lsp", "path", "snippets", "buffer" }
+						return { "avante", "lsp", "path", "snippets", "buffer" }
 					end
 				end,
+				providers = {
+					avante = {
+						module = "blink-cmp-avante",
+						name = "Avante",
+						opts = {},
+					},
+				},
 			},
 			signature = { enabled = true },
 			completion = {
