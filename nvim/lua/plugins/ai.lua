@@ -1,11 +1,14 @@
+local function is_personal_mac()
+	return vim.fn.expand("$USER") == "jpramos"
+end
 return {
 	"yetone/avante.nvim",
 	event = "VeryLazy",
 	version = false,
 	opts = {
 		-- add any opts here
-		provider = "copilot",
-		auto_suggestions_provider = "copilot",
+		provider = is_personal_mac() and "claude" or "copilot",
+		auto_suggestions_provider = is_personal_mac() and "claude" or "copilot",
 		behaviour = {
 			auto_apply_diff_after_generation = true,
 			enable_token_counting = false,
