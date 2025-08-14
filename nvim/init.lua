@@ -91,6 +91,17 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 vim.keymap.set("n", "]q", "<cmd>cnext<CR>", { desc = "Next quickfix item" })
 vim.keymap.set("n", "[q", "<cmd>cprev<CR>", { desc = "Prev quickfix item" })
 
+vim.api.nvim_create_user_command("Cpfp", function()
+	local rel = vim.fn.expand("%:.") -- path relative to CWD
+	if rel == "" then
+		vim.notify("No file path for current buffer", vim.log.levels.WARN)
+		return
+	end
+	vim.fn.setreg("+", rel)
+	vim.fn.setreg("*", rel)
+	vim.notify("Copied path: " .. rel)
+end, {})
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
