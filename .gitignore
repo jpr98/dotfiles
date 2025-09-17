@@ -7,3 +7,5 @@ stripe/*
 wezterm/*
 github-copilot/*
 configstore/*
+packer/*
+mise/*
