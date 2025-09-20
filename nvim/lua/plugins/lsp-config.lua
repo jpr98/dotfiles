@@ -249,15 +249,19 @@ return {
 					then
 						return { "avante", "buffer" }
 					else
-						return { "avante", "lsp", "path", "snippets", "buffer" }
+						return { "avante", "lsp", "path", "buffer" }
 					end
 				end,
+				per_filetype = {
+					sql = { "dadbod", "buffer", "snippets" },
+				},
 				providers = {
 					avante = {
 						module = "blink-cmp-avante",
 						name = "Avante",
 						opts = {},
 					},
+					dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
 				},
 			},
 			signature = { enabled = true },

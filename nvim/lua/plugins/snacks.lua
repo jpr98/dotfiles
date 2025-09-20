@@ -227,11 +227,7 @@ return {
 		{
 			"<leader>ws",
 			function()
-				Snacks.picker.lsp_workspace_symbols({
-					on_show = function()
-						vim.cmd.stopinsert()
-					end,
-				})
+				Snacks.picker.lsp_workspace_symbols()
 			end,
 			desc = "[W]workspace [S]ymbols",
 		},
