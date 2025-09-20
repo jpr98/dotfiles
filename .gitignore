@@ -8,3 +8,5 @@ wezterm/*
 github-copilot/*
 configstore/*
 git/*
+packer/*
+mise/*
