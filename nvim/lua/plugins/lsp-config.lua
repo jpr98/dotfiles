@@ -150,7 +150,7 @@ return {
 						},
 					},
 				},
-				volar = { "vue" },
+				-- volar = { "vue" },
 			}
 
 			-- Ensure the servers and tools above are installed
