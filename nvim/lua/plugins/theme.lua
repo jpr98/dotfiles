@@ -8,13 +8,12 @@ return {
 	},
 	{
 		"cdmill/neomodern.nvim",
-		lazy = false,
 		priority = 1000,
 		config = function()
-			require("neomodern").setup({
-				theme = "roseprime",
-			})
-			require("neomodern").load()
+			-- require("neomodern").setup({
+			-- 	theme = "roseprime",
+			-- })
+			-- require("neomodern").load()
 		end,
 	},
 	{
@@ -27,6 +26,17 @@ return {
 	},
 	{
 		"rebelot/kanagawa.nvim",
+	},
+	{
+		"vague2k/vague.nvim",
+		lazy = false,
+		priority = 1000,
+		config = function()
+			require("vague").setup({
+				-- optional configuration here
+			})
+			vim.cmd("colorscheme vague")
+		end,
 	},
 	{
 		"catppuccin/nvim",

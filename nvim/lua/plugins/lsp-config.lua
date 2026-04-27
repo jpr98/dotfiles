@@ -9,6 +9,142 @@ return {
 			{ "j-hui/fidget.nvim", opts = {} },
 		},
 		config = function()
+			vim.g.gopls_code_action_order = vim.g.gopls_code_action_order
+				or {
+					"fill",
+					-- { kind = "source.organizeImports" },
+				}
+
+			local function matches_rule(action, rule)
+				if not rule then
+					return false
+				end
+
+				local title = (action.title or ""):lower()
+				local kind = (action.kind or ""):lower()
+				local command = ""
+				if action.command and action.command.command then
+					command = action.command.command:lower()
+				end
+
+				if type(rule) == "string" then
+					rule = rule:lower()
+					return title:find(rule, 1, true) or kind:find(rule, 1, true) or command:find(rule, 1, true)
+				end
+
+				if type(rule) == "table" then
+					if type(rule.title) == "string" and not title:find(rule.title:lower(), 1, true) then
+						return false
+					end
+					if type(rule.kind) == "string" and not kind:find(rule.kind:lower(), 1, true) then
+						return false
+					end
+					if type(rule.command) == "string" and not command:find(rule.command:lower(), 1, true) then
+						return false
+					end
+					return true
+				end
+
+				return false
+			end
+
+			local function gopls_code_action_priority(action, rules)
+				for idx, rule in ipairs(rules) do
+					if matches_rule(action, rule) then
+						return idx
+					end
+				end
+
+				return math.huge
+			end
+
+			if not vim.g.__gopls_code_action_wrapped then
+				vim.g.__gopls_code_action_wrapped = true
+				local original_code_action = vim.lsp.buf.code_action
+				vim.lsp.buf.code_action = function(opts)
+					opts = opts or {}
+					local original_select = vim.ui.select
+					local select_called = false
+
+					vim.ui.select = function(items, select_opts, on_choice)
+						if not select_called then
+							select_called = true
+							vim.ui.select = original_select
+						end
+
+						local rules = vim.g.gopls_code_action_order
+						if
+							select_opts
+							and select_opts.kind == "codeaction"
+							and vim.tbl_islist(items)
+							and vim.tbl_islist(rules)
+							and not vim.tbl_isempty(items)
+							and not vim.tbl_isempty(rules)
+						then
+							local decorated = {}
+							for idx, entry in ipairs(items) do
+								decorated[idx] = { entry = entry, original_index = idx }
+							end
+
+							table.sort(decorated, function(a, b)
+								local function sort_key(wrapper)
+									local action = wrapper.entry and wrapper.entry.action or nil
+									local ctx = wrapper.entry and wrapper.entry.ctx or nil
+									if not action or not ctx or not ctx.client_id then
+										return 1, math.huge, wrapper.original_index, action and action.title or ""
+									end
+
+									local client = vim.lsp.get_client_by_id(ctx.client_id)
+									if not client or client.name ~= "gopls" then
+										return 1, math.huge, wrapper.original_index, action.title or ""
+									end
+
+									local priority = gopls_code_action_priority(action, rules)
+
+									if priority ~= math.huge then
+										return 0, priority, wrapper.original_index, action.title or ""
+									end
+
+									return 2, math.huge, wrapper.original_index, action.title or ""
+								end
+
+								local a_cat, a_prio, a_idx, a_title = sort_key(a)
+								local b_cat, b_prio, b_idx, b_title = sort_key(b)
+
+								if a_cat ~= b_cat then
+									return a_cat < b_cat
+								end
+
+								if a_prio ~= b_prio then
+									return a_prio < b_prio
+								end
+
+								if a_idx ~= b_idx then
+									return a_idx < b_idx
+								end
+
+								return a_title < b_title
+							end)
+
+							for idx, wrapper in ipairs(decorated) do
+								items[idx] = wrapper.entry
+							end
+						end
+
+						return original_select(items, select_opts, on_choice)
+					end
+
+					local ok, result = pcall(original_code_action, opts)
+					if not select_called then
+						vim.ui.select = original_select
+					end
+					if not ok then
+						error(result)
+					end
+					return result
+				end
+			end
+
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
 				callback = function(event)
@@ -162,12 +298,14 @@ return {
 			vim.list_extend(ensure_installed, {
 				"stylua", -- Used to format Lua code
 				"prettier",
-				"ts_ls",
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
 			---@diagnostic disable [missing-fields]
 			require("mason-lspconfig").setup({
+				automatic_enable = {
+					exclude = { "ts_ls" },
+				},
 				handlers = {
 					function(server_name)
 						local server = servers[server_name] or {}
