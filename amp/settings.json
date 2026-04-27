@@ -1,0 +1,23 @@
+{
+  "amp.dangerouslyAllowAll": true,
+  "amp.experimental.modes": [
+    "deep",
+    "bombadil"
+  ],
+  "amp.mcpServers": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": [
+        "chrome-devtools-mcp@latest"
+      ]
+    }
+  },
+  "amp.mcpTrustedServers": [
+    {
+      "serverName": "chrome-devtools-mcp",
+      "specHash": "7b169d5a08321bc8040f64ff9368382a2ef1794905499feee7a6bbd0baf2c014",
+      "allow": false
+    }
+  ],
+  "amp.agent.deepReasoningEffort": "medium"
+}

@@ -1,0 +1,2 @@
+keybind = ctrl+alt+left=move_tab:-1
+keybind = ctrl+alt+right=move_tab:1
