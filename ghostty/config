@@ -1,2 +1,13 @@
+cursor-style = block
+shell-integration-features = no-cursor
+cursor-style-blink = false
+font-feature = -liga
+font-feature = -dliga
+font-size = 14
+theme = Tomorrow Night Eighties
+gtk-titlebar = false
+keybind = shift+enter=text:\n
+font-family = JetBrainsMono Nerd Font
+
 keybind = ctrl+alt+left=move_tab:-1
 keybind = ctrl+alt+right=move_tab:1
