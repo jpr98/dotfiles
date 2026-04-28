@@ -1,5 +1,6 @@
 return {
 	"nvim-treesitter/nvim-treesitter",
+	branch = "master",
 	build = ":TSUpdate",
 	main = "nvim-treesitter.configs",
 	opts = {
@@ -8,6 +9,7 @@ return {
 			"c",
 			"diff",
 			"go",
+			"http",
 			"lua",
 			"luadoc",
 			"markdown",
@@ -15,7 +17,6 @@ return {
 			"vim",
 			"vimdoc",
 			"vue",
-			"swift",
 			"python",
 		},
 		auto_install = true,

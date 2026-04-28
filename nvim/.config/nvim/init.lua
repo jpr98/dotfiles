@@ -125,6 +125,10 @@ vim.diagnostic.config({
 })
 
 -- [[ Configure and install plugins ]]
-require("lazy").setup("plugins")
+require("lazy").setup("plugins", {
+	rocks = {
+		hererocks = true, -- ensure lazy.nvim installs compatible lua/luarocks for rockspec deps
+	},
+})
 
 -- vim: ts=2 sts=2 sw=2 et

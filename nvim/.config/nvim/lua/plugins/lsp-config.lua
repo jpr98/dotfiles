@@ -365,7 +365,6 @@ return {
 					},
 				},
 			},
-			"Kaiser-Yang/blink-cmp-avante",
 		},
 
 		-- use a release tag to download pre-built binaries
@@ -385,20 +384,15 @@ return {
 						and node
 						and vim.tbl_contains({ "comment", "line_comment", "block_comment" }, node:type())
 					then
-						return { "avante", "buffer" }
+						return { "buffer" }
 					else
-						return { "avante", "lsp", "path", "buffer" }
+						return { "lsp", "path", "buffer" }
 					end
 				end,
 				per_filetype = {
 					sql = { "dadbod", "buffer", "snippets" },
 				},
 				providers = {
-					avante = {
-						module = "blink-cmp-avante",
-						name = "Avante",
-						opts = {},
-					},
 					dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
 				},
 			},
