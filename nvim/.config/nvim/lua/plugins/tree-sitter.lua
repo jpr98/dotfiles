@@ -1,10 +1,10 @@
 return {
 	"nvim-treesitter/nvim-treesitter",
-	branch = "master",
+	branch = "main",
 	build = ":TSUpdate",
-	main = "nvim-treesitter.configs",
-	opts = {
-		ensure_installed = {
+	lazy = false,
+	config = function()
+		local parsers = {
 			"bash",
 			"c",
 			"diff",
@@ -18,15 +18,25 @@ return {
 			"vimdoc",
 			"vue",
 			"python",
-		},
-		auto_install = true,
-		highlight = {
-			enable = true,
-		},
-		indent = { enable = true },
-	},
-	--    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-	--    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-	--    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+		}
+
+		require("nvim-treesitter").install(parsers)
+
+		local filetypes = {}
+		for _, lang in ipairs(parsers) do
+			local ft = vim.treesitter.language.get_filetypes(lang)
+			vim.list_extend(filetypes, ft)
+		end
+
+		vim.api.nvim_create_autocmd("FileType", {
+			pattern = filetypes,
+			callback = function(ev)
+				local lang = vim.treesitter.language.get_lang(vim.bo[ev.buf].filetype)
+				if lang and pcall(vim.treesitter.start, ev.buf, lang) then
+					vim.bo[ev.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+				end
+			end,
+		})
+	end,
 }
 -- vim: ts=4 sts=4 sw=4 et
