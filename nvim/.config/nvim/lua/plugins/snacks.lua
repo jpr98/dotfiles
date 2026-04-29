@@ -20,6 +20,7 @@ return {
 			},
 		},
 		picker = {},
+		quickfile = {},
 	},
 	keys = {
 		{

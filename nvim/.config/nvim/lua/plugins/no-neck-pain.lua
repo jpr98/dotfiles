@@ -16,7 +16,7 @@ end
 
 local function get_or_create_notes(repoName)
 	local home = os.getenv("HOME")
-	local path = home .. "/Documents/nvim-notes/" .. repoName
+	local path = home .. "/Documents/nvim-notes/" .. (repoName or "_global")
 	local ok, err = os.execute('mkdir -p "' .. path .. '"')
 	if not ok then
 		error("Failed to create directory: " .. err)
