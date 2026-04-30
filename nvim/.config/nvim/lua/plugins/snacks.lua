@@ -19,7 +19,12 @@ return {
 				{ section = "startup" },
 			},
 		},
-		picker = {},
+		picker = {
+			sources = {
+				files = { exclude = { "node_modules", ".git", ".next" } },
+				grep = { exclude = { "node_modules", ".git", ".next" } },
+			},
+		},
 		quickfile = {},
 	},
 	keys = {
